@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Game() {
   return (
     <div style={{ padding: 20, fontFamily: "system-ui" }}>
