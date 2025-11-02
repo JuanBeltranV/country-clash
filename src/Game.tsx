@@ -17,8 +17,8 @@ export default function Game() {
   const [loading, setLoading] = useState(true);
 
   const [score, setScore] = useState(0);
-  const [champion, setChampion] = useState<Country | null>(null);
-  const [challenger, setChallenger] = useState<Country | null>(null);
+  const [leftCountry, setLeftCountry] = useState<Country | null>(null);   // antes "champion"
+  const [rightCountry, setRightCountry] = useState<Country | null>(null); // antes "challenger"
 
   const [leftRevealed, setLeftRevealed] = useState(false);
   const [rightRevealed, setRightRevealed] = useState(false);
@@ -34,8 +34,8 @@ export default function Game() {
         const data = await fetchCountries();
         setPool(data);
         const [a, b] = pickTwoDistinct(data);
-        setChampion(a);
-        setChallenger(b);
+        setLeftCountry(a);
+        setRightCountry(b);
         setScore(0);
         setLeftRevealed(false);
         setRightRevealed(false);
@@ -48,8 +48,8 @@ export default function Game() {
   function startNewGame() {
     if (pool.length < 2) return;
     const [a, b] = pickTwoDistinct(pool);
-    setChampion(a);
-    setChallenger(b);
+    setLeftCountry(a);
+    setRightCountry(b);
     setScore(0);
     setLeftRevealed(false);
     setRightRevealed(false);
@@ -57,48 +57,57 @@ export default function Game() {
     setLostModalOpen(false);
   }
 
-  function nextRound(keep: Country) {
-    let c: Country;
-    do {
-      c = pool[Math.floor(Math.random() * pool.length)];
-    } while (c.cca3 === keep.cca3);
+  // ⬇️ Nueva regla: SIEMPRE el de la derecha pasa a la izquierda para la próxima ronda.
+  function advanceWithRightAsNewLeft() {
+    if (!rightCountry) return;
 
-    setChampion(keep);
-    setChallenger(c);
-    setLeftRevealed(true);     // el campeón queda visible
-    setRightRevealed(false);   // el retador entra oculto
+    // El nuevo "base" es el antiguo contrincante (derecha)
+    const newLeft = rightCountry;
+
+    // Elegimos un nuevo país para la derecha (distinto del nuevoLeft)
+    let newRight: Country;
+    do {
+      newRight = pool[Math.floor(Math.random() * pool.length)];
+    } while (newRight.cca3 === newLeft.cca3);
+
+    setLeftCountry(newLeft);
+    setRightCountry(newRight);
+
+    // El de la izquierda queda revelado (continuidad), el nuevo entra oculto
+    setLeftRevealed(true);
+    setRightRevealed(false);
     setEmphasizeNow(false);
   }
 
   function choose(side: "left" | "right") {
-    if (!champion || !challenger) return;
+    if (!leftCountry || !rightCountry) return;
 
-    // Revela ambas poblaciones y activa énfasis visual
+    // Revela ambas poblaciones y énfasis visual
     setLeftRevealed(true);
     setRightRevealed(true);
     setEmphasizeNow(true);
 
-    const leftPop = champion.population;
-    const rightPop = challenger.population;
+    const leftPop = leftCountry.population;
+    const rightPop = rightCountry.population;
     const chosenPop = side === "left" ? leftPop : rightPop;
     const otherPop  = side === "left" ? rightPop : leftPop;
 
     const correct = chosenPop >= otherPop; // empate = correcto
+
     setTimeout(() => {
       if (correct) {
         setScore(s => s + 1);
-        const newChampion = side === "left" ? champion : challenger;
-        nextRound(newChampion);
+        // Nueva mecánica: pase lo que pase, el de la derecha va a la izquierda
+        advanceWithRightAsNewLeft();
       } else {
-        // Mostrar modal en vez de alert
+        // Mostrar modal (no avanzamos de ronda)
         setLastScore(score);
         setLostModalOpen(true);
-        // dejamos los países revelados para que el usuario vea el resultado
       }
     }, REVEAL_DELAY_MS);
   }
 
-  if (loading || !champion || !challenger) {
+  if (loading || !leftCountry || !rightCountry) {
     return <p className="loading">Cargando…</p>;
   }
 
@@ -110,7 +119,7 @@ export default function Game() {
 
       <div className="board" aria-hidden={lostModalOpen}>
         <CountryCard
-          country={champion}
+          country={leftCountry}
           showPopulation={leftRevealed}
           emphasize={emphasizeNow}
           size={360}
@@ -118,7 +127,7 @@ export default function Game() {
         />
         <div className="vs" aria-label="versus">VS</div>
         <CountryCard
-          country={challenger}
+          country={rightCountry}
           showPopulation={rightRevealed}
           emphasize={emphasizeNow}
           size={360}
