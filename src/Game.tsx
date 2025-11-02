@@ -10,7 +10,6 @@ function pickTwoDistinct<T>(arr: T[]) {
   return [arr[i], arr[j]] as [T, T];
 }
 
-// ⬇️ más tiempo para ver la diferencia
 const REVEAL_DELAY_MS = 1200;
 
 export default function Game() {
@@ -21,10 +20,13 @@ export default function Game() {
   const [champion, setChampion] = useState<Country | null>(null);
   const [challenger, setChallenger] = useState<Country | null>(null);
 
-  // Revelado + énfasis (para la animación de números)
   const [leftRevealed, setLeftRevealed] = useState(false);
   const [rightRevealed, setRightRevealed] = useState(false);
   const [emphasizeNow, setEmphasizeNow] = useState(false);
+
+  // Modal de derrota
+  const [lostModalOpen, setLostModalOpen] = useState(false);
+  const [lastScore, setLastScore] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -43,6 +45,18 @@ export default function Game() {
     })();
   }, []);
 
+  function startNewGame() {
+    if (pool.length < 2) return;
+    const [a, b] = pickTwoDistinct(pool);
+    setChampion(a);
+    setChallenger(b);
+    setScore(0);
+    setLeftRevealed(false);
+    setRightRevealed(false);
+    setEmphasizeNow(false);
+    setLostModalOpen(false);
+  }
+
   function nextRound(keep: Country) {
     let c: Country;
     do {
@@ -53,7 +67,7 @@ export default function Game() {
     setChallenger(c);
     setLeftRevealed(true);     // el campeón queda visible
     setRightRevealed(false);   // el retador entra oculto
-    setEmphasizeNow(false);    // resetea énfasis
+    setEmphasizeNow(false);
   }
 
   function choose(side: "left" | "right") {
@@ -76,14 +90,10 @@ export default function Game() {
         const newChampion = side === "left" ? champion : challenger;
         nextRound(newChampion);
       } else {
-        alert(`❌ Perdiste. Puntaje: ${score}`);
-        const [a, b] = pickTwoDistinct(pool);
-        setChampion(a);
-        setChallenger(b);
-        setScore(0);
-        setLeftRevealed(false);
-        setRightRevealed(false);
-        setEmphasizeNow(false);
+        // Mostrar modal en vez de alert
+        setLastScore(score);
+        setLostModalOpen(true);
+        // dejamos los países revelados para que el usuario vea el resultado
       }
     }, REVEAL_DELAY_MS);
   }
@@ -98,15 +108,15 @@ export default function Game() {
         <h1>Country Clash — Population Battle</h1>
       </header>
 
-      <div className="board">
+      <div className="board" aria-hidden={lostModalOpen}>
         <CountryCard
           country={champion}
           showPopulation={leftRevealed}
           emphasize={emphasizeNow}
-          size={360} /* ⬅️ más grande */
+          size={360}
           onPick={() => choose("left")}
         />
-        <div className="vs">VS</div>
+        <div className="vs" aria-label="versus">VS</div>
         <CountryCard
           country={challenger}
           showPopulation={rightRevealed}
@@ -116,9 +126,22 @@ export default function Game() {
         />
       </div>
 
-      <footer className="footer">
+      <footer className="footer" aria-hidden={lostModalOpen}>
         <div className="score">Puntaje: {score}</div>
       </footer>
+
+      {/* Modal de derrota */}
+      {lostModalOpen && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="lose-title">
+          <div className="modal">
+            <h2 id="lose-title">Perdiste</h2>
+            <p className="modal-sub">Puntaje obtenido: <b>{lastScore}</b></p>
+            <button className="btn btn-primary" onClick={startNewGame}>
+              Reiniciar partida
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
