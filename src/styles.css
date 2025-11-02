@@ -1,32 +1,183 @@
-:root { font-family: Inter, system-ui, Arial; color-scheme: light; }
-* { box-sizing: border-box; }
-body { margin: 0; background: #fafbff; color: #222; }
-
-.wrapper { max-width: 980px; margin: 24px auto; padding: 0 16px; }
-.top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.score { font-weight: 700; background:#eef2ff; padding:6px 10px; border-radius:10px; }
-
-.board { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 20px; align-items: center; }
-.vs { text-align: center; font-weight: 800; font-size: 24px; opacity: .6; }
-
-.card {
-  border: 1px solid #e8e8e8;
-  background: #fff;
-  border-radius: 16px;
-  padding: 16px;
-  cursor: pointer;
-  transition: transform .15s ease, box-shadow .15s ease;
+:root {
+  --bg: #0b1220;          /* fondo oscuro */
+  --panel: #111827;       /* card */
+  --panel-border: rgba(255,255,255,.06);
+  --text: #e5e7eb;        /* texto claro */
+  --muted: #9ca3af;       /* gris */
+  --accent: #60a5fa;      /* azul */
+  --accent-soft: #1e293b; /* azul suave para decor */
 }
-.card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(14,24,56,.08); }
 
-.outline { display: grid; place-items: center; }
-.outline svg path { fill: #f2f6ff; stroke: #88a1ff; stroke-width: 1; }
-.outline-fallback { width: 220px; height: 220px; display:grid; place-items:center; background:#f4f4f4; border-radius:12px; }
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); }
 
-.flag { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; margin: 12px 0; border: 1px solid #eee; }
-.name { margin: 4px 0 8px; }
-.meta { color: #666; }
-.hidden { opacity: .6; }
+.wrapper {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* header | board | footer */
+}
 
-.loading { text-align: center; margin-top: 48px; color: #555; }
-.hint { text-align: center; opacity: .7; margin-top: 16px; }
+.top {
+  display: grid;
+  place-items: center;
+  padding: 28px 16px 8px;
+  border-bottom: 1px solid var(--panel-border);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+  letter-spacing: 0.3px;
+  font-weight: 800;
+}
+
+/* ---------- TABLERO CENTRADO (cards + VS) ---------- */
+.board {
+  display: flex;
+  justify-content: center;        /* centra horizontalmente */
+  align-items: center;            /* centra verticalmente dentro de su fila */
+  gap: clamp(40px, 6vw, 80px);    /* espacio entre elementos */
+  margin-top: clamp(20px, 5vh, 40px);
+  flex-wrap: wrap;                /* se adapta en pantallas pequeñas */
+  text-align: center;
+}
+
+.vs {
+  position: relative;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: var(--accent);
+  opacity: 0.85;
+  text-shadow: 0 0 16px rgba(96,165,250,0.25);
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(60px, 10vw, 100px);
+  height: clamp(60px, 10vw, 100px);
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: radial-gradient(circle at center, rgba(96,165,250,0.15), transparent 70%);
+  /* Animación leve de pulso (opcional, descomenta) */
+  /* animation: vsPulse 2.6s ease-in-out infinite; */
+}
+
+@keyframes vsPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(96,165,250,0); }
+  50%      { transform: scale(1.06); box-shadow: 0 0 32px rgba(96,165,250,0.15); }
+}
+
+.footer {
+  display: grid;
+  place-items: center;
+  padding: 18px 16px 30px;
+  border-top: 1px solid var(--panel-border);
+  background: linear-gradient(0deg, rgba(255,255,255,0.02), transparent);
+}
+
+.score {
+  font-weight: 900;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  padding: 10px 16px;
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  background: radial-gradient(1200px 300px at 50% 100%, rgba(96,165,250,0.08), transparent 60%);
+}
+
+/* ----- Card ----- */
+.card {
+  width: min(520px, 90vw);
+  border: 1px solid var(--panel-border);
+  background: var(--panel);
+  border-radius: 18px;
+  padding: 18px;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  box-shadow: 0 12px 38px rgba(0,0,0,.28);
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(96,165,250,.28);
+  box-shadow: 0 18px 52px rgba(2,6,23,.5);
+}
+
+/* ----- Outline (silueta) ----- */
+.outline {
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+}
+.outline svg {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+}
+.outline svg path {
+  fill: #0f172a;
+  stroke: #334155;
+  stroke-width: 1.1;
+  transition: stroke 0.25s ease, filter 0.25s ease;
+}
+
+.card:hover .outline svg path {
+  stroke: #93c5fd;
+  filter: drop-shadow(0 0 6px rgba(147,197,253,0.45));
+}
+
+
+.outline-fallback {
+  width: 360px; height: 360px;
+  display: grid; place-items: center;
+  background: var(--accent-soft); border-radius: 12px;
+}
+
+/* ----- Bandera ----- */
+.flag {
+  width: 100%;
+  height: clamp(180px, 26vw, 240px);
+  object-fit: cover;
+  border-radius: 14px;
+  margin: 14px 0;
+  border: 1px solid var(--panel-border);
+}
+
+/* ----- Textos ----- */
+.name {
+  margin: 6px 0 10px;
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-weight: 800;
+  color: #ffffff;                 /* blanco puro para el nombre */
+  text-shadow: 0 0 8px rgba(255,255,255,0.12);
+}
+
+.meta { color: var(--muted); }
+
+.pop {
+  display: inline-block;
+  font-weight: 900;
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  color: var(--text);
+}
+
+/* placeholder antes de revelar */
+.hidden { opacity: .65; }
+
+/* Efecto de énfasis cuando se revela */
+.pop.revealed.emph {
+  animation: popScale 950ms cubic-bezier(.2, .9, .1, 1.02);
+}
+@keyframes popScale {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* Loader / hint */
+.loading { text-align: center; margin-top: 48px; color: var(--muted); }
+.hint { text-align: center; opacity: .72; margin-top: 16px; color: var(--muted); }
+
+/* (Opcional) estilo para marcar card ganadora si lo usas en el futuro */
+.card.correct .name {
+  color: #93c5fd;
+  text-shadow: 0 0 12px rgba(147,197,253,0.4);
+  transition: color 0.4s ease;
+}

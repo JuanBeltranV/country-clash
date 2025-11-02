@@ -1,22 +1,26 @@
 import type { Country } from "../api/restCountries";
-import { buildProjector, findFeatureByCCA3 } from "../geo/countries";
+import { buildProjector, findFeature } from "../geo/countries";
 
 export function CountryCard({
   country,
   showPopulation,
+  emphasize = false,
+  size = 360,
   onPick,
 }: {
   country: Country;
   showPopulation: boolean;
+  emphasize?: boolean;
+  size?: number;
   onPick: () => void;
 }) {
-  const feature = findFeatureByCCA3(country.cca3);
-  const proj = feature ? buildProjector(feature, 220) : null;
+  const feature = findFeature(country);
+  const proj = feature ? buildProjector(feature as any, size) : null;
 
   return (
     <button className="card" onClick={onPick} aria-label={`Elegir ${country.name.common}`}>
       <div className="outline">
-        {proj ? (
+        {proj && feature ? (
           <svg
             width={proj.size}
             height={proj.size}
@@ -24,7 +28,18 @@ export function CountryCard({
             role="img"
             aria-label={`Mapa de ${country.name.common}`}
           >
-            <path d={proj.path(feature as any)!} />
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#1e293b" />
+                <stop offset="100%" stopColor="#0f172a" />
+              </linearGradient>
+            </defs>
+            <path
+              d={proj.path(feature as any)!}
+              fill="url(#grad)"
+              stroke="#60a5fa"
+              strokeWidth="1.2"
+            />
           </svg>
         ) : (
           <div className="outline-fallback">🗺️</div>
@@ -42,7 +57,9 @@ export function CountryCard({
 
       <div className="meta">
         {showPopulation ? (
-          <span className="pop">{country.population.toLocaleString()} hab.</span>
+          <span className={`pop revealed ${emphasize ? "emph" : ""}`}>
+            {country.population.toLocaleString()} hab.
+          </span>
         ) : (
           <span className="hidden">¿Cuál tiene más población?</span>
         )}

@@ -10,6 +10,9 @@ function pickTwoDistinct<T>(arr: T[]) {
   return [arr[i], arr[j]] as [T, T];
 }
 
+// ⬇️ más tiempo para ver la diferencia
+const REVEAL_DELAY_MS = 1200;
+
 export default function Game() {
   const [pool, setPool] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,8 +21,10 @@ export default function Game() {
   const [champion, setChampion] = useState<Country | null>(null);
   const [challenger, setChallenger] = useState<Country | null>(null);
 
+  // Revelado + énfasis (para la animación de números)
   const [leftRevealed, setLeftRevealed] = useState(false);
   const [rightRevealed, setRightRevealed] = useState(false);
+  const [emphasizeNow, setEmphasizeNow] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -39,7 +44,6 @@ export default function Game() {
   }, []);
 
   function nextRound(keep: Country) {
-    // Elige un retador distinto del campeón actual.
     let c: Country;
     do {
       c = pool[Math.floor(Math.random() * pool.length)];
@@ -47,24 +51,25 @@ export default function Game() {
 
     setChampion(keep);
     setChallenger(c);
-    setLeftRevealed(true);   // el campeón queda revelado para las siguientes rondas
-    setRightRevealed(false); // el nuevo retador llega sin revelar
+    setLeftRevealed(true);     // el campeón queda visible
+    setRightRevealed(false);   // el retador entra oculto
+    setEmphasizeNow(false);    // resetea énfasis
   }
 
   function choose(side: "left" | "right") {
     if (!champion || !challenger) return;
 
-    // Revela ambas poblaciones para mostrar el resultado de la ronda
+    // Revela ambas poblaciones y activa énfasis visual
     setLeftRevealed(true);
     setRightRevealed(true);
+    setEmphasizeNow(true);
 
     const leftPop = champion.population;
     const rightPop = challenger.population;
-
     const chosenPop = side === "left" ? leftPop : rightPop;
     const otherPop  = side === "left" ? rightPop : leftPop;
 
-    const correct = chosenPop >= otherPop; // empate cuenta como correcto
+    const correct = chosenPop >= otherPop; // empate = correcto
     setTimeout(() => {
       if (correct) {
         setScore(s => s + 1);
@@ -78,8 +83,9 @@ export default function Game() {
         setScore(0);
         setLeftRevealed(false);
         setRightRevealed(false);
+        setEmphasizeNow(false);
       }
-    }, 700); // pequeño delay para que el usuario alcance a ver números
+    }, REVEAL_DELAY_MS);
   }
 
   if (loading || !champion || !challenger) {
@@ -90,18 +96,29 @@ export default function Game() {
     <div className="wrapper">
       <header className="top">
         <h1>Country Clash — Population Battle</h1>
-        <div className="score">Puntaje: {score}</div>
       </header>
 
       <div className="board">
-        <CountryCard country={champion} showPopulation={leftRevealed} onPick={() => choose("left")} />
+        <CountryCard
+          country={champion}
+          showPopulation={leftRevealed}
+          emphasize={emphasizeNow}
+          size={360} /* ⬅️ más grande */
+          onPick={() => choose("left")}
+        />
         <div className="vs">VS</div>
-        <CountryCard country={challenger} showPopulation={rightRevealed} onPick={() => choose("right")} />
+        <CountryCard
+          country={challenger}
+          showPopulation={rightRevealed}
+          emphasize={emphasizeNow}
+          size={360}
+          onPick={() => choose("right")}
+        />
       </div>
 
-      <p className="hint">
-        Elige el país con <b>más población</b>. Si aciertas, se queda a la izquierda y aparece un nuevo retador.
-      </p>
+      <footer className="footer">
+        <div className="score">Puntaje: {score}</div>
+      </footer>
     </div>
   );
 }
