@@ -8,14 +8,15 @@ Cada vez que aciertas, sumas puntos y continúas hasta fallar. ¡Pon a prueba tu
 ## 🕹️ Demo
 
 🔗 **[Jugar en GitHub Pages](https://juanbeltranv.github.io/country-clash/)**  
-*(haz clic para probar la versión en vivo)*
 
 ---
 
 ## 📸 Vista previa
 
 <p align="center">
-  <img src="public/assets/preview-example.png" alt="Country Clash Preview" width="600">
+  <a href="https://juanbeltranv.github.io/country-clash/" target="_blank">
+    <img src="public/assets/preview-example.png" alt="Country Clash Preview" width="600">
+  </a>
 </p>
 
 ---
@@ -28,8 +29,7 @@ Cada vez que aciertas, sumas puntos y continúas hasta fallar. ¡Pon a prueba tu
 - 🔢 Acierta cuál país tiene **más población**
 - 💀 Si fallas, aparece un **modal animado** con tu puntaje y opción de **reiniciar**
 - ⚡ Datos obtenidos desde la **API pública [REST Countries](https://restcountries.com)**
-- 🧩 Interfaz moderna, **oscura** y totalmente **responsive**
-- 🕹️ Fuente personalizada **Gomarice No Continue** (estilo retro)
+- 🧩 Interfaz moderna, **oscura**
 
 ---
 
