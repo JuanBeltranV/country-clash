@@ -1,5 +1,5 @@
 /* ============================
-   Tipografía y estilos base
+  Tipografía y estilos base
    ============================ */
 
 /* Fuente global: quiero algo grueso y simple → Arial Black.
@@ -27,13 +27,13 @@ body {
 html, body, #root { height: 100%; }
 
 /* ============================
-   Layout general (wrapper)
+  Layout general (wrapper)
    ============================ */
 
 /* El wrapper divide todo en 3 filas:
-   - header (top)
-   - tablero (board)
-   - footer (score) */
+  - header (top)
+  - tablero (board)
+  - footer (score) */
 .wrapper {
   min-height: 100vh;
   display: grid;
@@ -58,7 +58,7 @@ h1 {
 }
 
 /* ============================
-   Tablero: cards + VS
+  Tablero: cards + VS
    ============================ */
 
 /* Contenedor central del juego:
@@ -98,7 +98,7 @@ h1 {
 }
 
 /* ============================
-   Footer y puntaje
+  Footer y puntaje
    ============================ */
 
 /* Pie donde muestro el puntaje actual */
@@ -125,7 +125,7 @@ h1 {
 }
 
 /* ============================
-   Card de país
+  Card de país
    ============================ */
 
 /* Contenedor de cada país (clickable) */
@@ -151,7 +151,7 @@ h1 {
 }
 
 /* ============================
-   Silueta del país (SVG)
+  Silueta del país (SVG)
    ============================ */
 
 /* Contenedor que centra el SVG */
@@ -171,7 +171,7 @@ h1 {
 /* Color base del mapa y borde */
 .outline svg path {
   fill: #0f172a;
-  stroke: #334155;
+  stroke: #435165;
   stroke-width: 1.1;
   /* Solo cambio color/brillo, no el tamaño */
   transition: stroke 0.25s ease, filter 0.25s ease;
@@ -194,7 +194,7 @@ h1 {
 }
 
 /* ============================
-   Bandera e info textual
+  Bandera e info textual
    ============================ */
 
 /* Imagen de la bandera del país */
@@ -246,7 +246,7 @@ h1 {
 }
 
 /* ============================
-   Estados especiales y helpers
+  Estados especiales y helpers
    ============================ */
 
 /* Mensaje de carga mientras espero la API */
@@ -272,7 +272,7 @@ h1 {
 }
 
 /* ============================
-   Modal de derrota
+  Modal de derrota
    ============================ */
 
 /* Fondo oscuro semitransparente detrás del modal */
@@ -325,7 +325,7 @@ h1 {
 }
 
 /* ============================
-   Botones
+  Botones
    ============================ */
 
 /* Estilo base para todos los botones */
