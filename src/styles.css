@@ -1,23 +1,12 @@
-@font-face {
-  font-family: 'Gomarice';
-  src:
-    url('/country-clash/fonts/gomarice.woff2') format('woff2'),
-    url('/country-clash/fonts/gomarice.woff') format('woff'),
-    url('/country-clash/fonts/gomarice.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-
+/* Tipografía global: Arial Black (sistema) */
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Gomarice', sans-serif;
+  font-family: "Arial Black", Arial, Helvetica, sans-serif;
 }
 
-
+/* Variables */
 :root {
   --bg: #0b1220;          /* fondo oscuro */
   --panel: #111827;       /* card */
@@ -28,10 +17,11 @@ body {
   --accent-soft: #1e293b; /* azul suave para decor */
 }
 
+/* Reset base */
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
-body { margin: 0; background: var(--bg); color: var(--text); }
 
+/* Layout */
 .wrapper {
   min-height: 100vh;
   display: grid;
