@@ -11,11 +11,13 @@ const REVEAL_DELAY_MS = 1200; // tiempo de revelado de población
 
 export default function Game() {
   // Estados principales del juego
-  const [pool, setPool] = useState([]);      // mazo barajado de países
+  const [pool, setPool] = useState([]);          // mazo barajado de países
   const [nextIndex, setNextIndex] = useState(2); // próximo país nuevo
   const [loading, setLoading] = useState(true);
 
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(0);         // puntaje actual
+  const [bestScore, setBestScore] = useState(0); // mejor puntaje de esta sesión
+
   const [leftCountry, setLeftCountry] = useState(null);
   const [rightCountry, setRightCountry] = useState(null);
 
@@ -26,7 +28,7 @@ export default function Game() {
 
   // Modal de “perdiste”
   const [lostModalOpen, setLostModalOpen] = useState(false);
-  const [lastScore, setLastScore] = useState(0);
+  const [lastScore, setLastScore] = useState(0); // puntaje de la corrida que acabo de perder
 
   // Carga inicial del juego
   useEffect(() => {
@@ -50,6 +52,7 @@ export default function Game() {
         setRightCountry(b);
         setNextIndex(2);
         setScore(0);
+        setBestScore(0); // por si algún día recargo manualmente desde aquí
         setLeftRevealed(false);
         setRightRevealed(false);
 
@@ -71,14 +74,15 @@ export default function Game() {
     setLeftCountry(a);
     setRightCountry(b);
     setNextIndex(2);
-    setScore(0);
+    setScore(0);               // el score actual sí lo reinicio
+    // OJO: el bestScore no lo toco, así se mantiene mientras no recargue la página
     setLeftRevealed(false);
     setRightRevealed(false);
     setEmphasizeNow(false);
     setLostModalOpen(false);
   }
 
-  // Atajo: reinicia todo
+  // Atajo: reinicia todo para una nueva corrida
   function startNewGame() {
     resetRunWithSamePool();
   }
@@ -86,12 +90,14 @@ export default function Game() {
   // Cada vez que acierto:
   // → el país derecho pasa a la izquierda
   // → el siguiente del pool entra a la derecha
-  function advanceWithRightAsNewLeft() {
+  // recibo nextScore para poder manejar el caso "corrida perfecta"
+  function advanceWithRightAsNewLeft(nextScoreValue) {
     if (!rightCountry || pool.length < 2) return;
 
+    // Si ya no hay países nuevos, llegué al máximo sin repetir
     if (nextIndex >= pool.length) {
-      // No quedan países nuevos → fin del juego perfecto
-      setLastScore((s) => s + 1);
+      setLastScore(nextScoreValue);
+      setBestScore((prev) => Math.max(prev, nextScoreValue));
       setLostModalOpen(true);
       return;
     }
@@ -125,10 +131,24 @@ export default function Game() {
 
     setTimeout(() => {
       if (correct) {
-        setScore((s) => s + 1);
-        advanceWithRightAsNewLeft();
+        // Calculo el nuevo score yo mismo para poder reutilizarlo
+        const nextScore = score + 1;
+
+        // Actualizo el score actual
+        setScore(nextScore);
+
+        // Actualizo el mejor puntaje si corresponde
+        setBestScore((prev) => Math.max(prev, nextScore));
+
+        // Continúo el juego con el nuevo estado
+        advanceWithRightAsNewLeft(nextScore);
       } else {
+        // Guardar el puntaje con el que acabo de perder
         setLastScore(score);
+
+        // Actualizar mejor puntaje también aquí
+        setBestScore((prev) => Math.max(prev, score));
+
         setLostModalOpen(true);
       }
     }, REVEAL_DELAY_MS);
@@ -165,7 +185,10 @@ export default function Game() {
       </div>
 
       <footer className="footer">
-        <div className="score">Puntaje: {score}</div>
+        {/* Muestro puntaje actual y mejor puntaje de esta sesión */}
+        <div className="score">
+          Puntaje: {score} &nbsp;|&nbsp; Mejor: {bestScore}
+        </div>
       </footer>
 
       {/* Modal de derrota */}
