@@ -43,7 +43,6 @@ export function findFeature(country) {
   const f2 = countriesFC.features.find((ft) => getISO3(ft.properties) === target);
   if (f2) return f2;
 
-  // Aquí podrías poner overrides manuales (ej. XKX/Kosovo)
   return undefined;
 }
 

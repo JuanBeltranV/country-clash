@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Game from "./Game.jsx";     // o "./Game"
+import Game from "./Game.jsx";
 import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
