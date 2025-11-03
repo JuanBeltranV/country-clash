@@ -1,9 +1,14 @@
 @font-face {
   font-family: 'Gomarice';
-  src: url('./assets/gomarice_no_continue.ttf') format('truetype');
+  src:
+    url('/country-clash/fonts/gomarice.woff2') format('woff2'),
+    url('/country-clash/fonts/gomarice.woff') format('woff'),
+    url('/country-clash/fonts/gomarice.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
+
 
 body {
   margin: 0;
