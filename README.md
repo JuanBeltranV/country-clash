@@ -15,7 +15,7 @@ Cada vez que aciertas, sumas puntos y continúas hasta fallar. ¡Pon a prueba tu
 ## 📸 Vista previa
 
 <p align="center">
-  <img src="https://github.com/JuanBeltranV/country-clash/src/assets/preview-example.png" alt="Country Clash Preview" width="600">
+  <img src="https://github.com/JuanBeltranV/country-clash/assets/preview-example.png" alt="Country Clash Preview" width="600">
 </p>
 
 ---
