@@ -1,5 +1,6 @@
 import { buildProjector, findFeature } from "../geo/countries";
 
+// Componente visual de cada país (bandera + nombre + mapa)
 export function CountryCard({
   country,
   showPopulation,
@@ -7,12 +8,19 @@ export function CountryCard({
   size = 360,
   onPick,
 }) {
+  // Busco la silueta del país (si existe)
   const feature = findFeature(country);
   const proj = feature ? buildProjector(feature, size) : null;
 
   return (
-    <button className="card" onClick={onPick} aria-label={`Elegir ${country.name.common}`}>
+    // Cada card es un botón que puedo hacer clic para elegir
+    <button
+      className="card"
+      onClick={onPick}
+      aria-label={`Elegir ${country.name.common}`}
+    >
       <div className="outline">
+        {/* Si el país tiene silueta, la muestro con SVG */}
         {proj && feature ? (
           <svg
             width={proj.size}
@@ -35,10 +43,12 @@ export function CountryCard({
             />
           </svg>
         ) : (
+          // Si no tiene silueta, muestro un fallback
           <div className="outline-fallback">🗺️</div>
         )}
       </div>
 
+      {/* Bandera */}
       <img
         className="flag"
         src={country.flags.svg || country.flags.png}
@@ -46,8 +56,10 @@ export function CountryCard({
         loading="lazy"
       />
 
+      {/* Nombre */}
       <h3 className="name">{country.name.common}</h3>
 
+      {/* Población o texto oculto */}
       <div className="meta">
         {showPopulation ? (
           <span className={`pop revealed ${emphasize ? "emph" : ""}`}>
