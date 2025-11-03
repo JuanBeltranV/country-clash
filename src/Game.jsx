@@ -163,7 +163,7 @@ export default function Game() {
   return (
     <div className="wrapper">
       <header className="top">
-        <h1>Country Clash — Population Battle</h1>
+        <h1>Country Clash - Population Battle</h1>
       </header>
 
       <div className="board" aria-hidden={lostModalOpen}>
