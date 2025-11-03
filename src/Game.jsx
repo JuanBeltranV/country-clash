@@ -1,30 +1,28 @@
 import { useEffect, useState } from "react";
-import type { Country } from "./api/restCountries";
 import { fetchCountries } from "./api/restCountries";
 import { CountryCard } from "./components/CountryCard";
 
-function pickTwoDistinct<T>(arr: T[]) {
+function pickTwoDistinct(arr) {
   const i = Math.floor(Math.random() * arr.length);
   let j = Math.floor(Math.random() * arr.length);
   if (j === i) j = (j + 1) % arr.length;
-  return [arr[i], arr[j]] as [T, T];
+  return [arr[i], arr[j]];
 }
 
 const REVEAL_DELAY_MS = 1200;
 
 export default function Game() {
-  const [pool, setPool] = useState<Country[]>([]);
+  const [pool, setPool] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [score, setScore] = useState(0);
-  const [leftCountry, setLeftCountry] = useState<Country | null>(null);   // antes "champion"
-  const [rightCountry, setRightCountry] = useState<Country | null>(null); // antes "challenger"
+  const [leftCountry, setLeftCountry] = useState(null);
+  const [rightCountry, setRightCountry] = useState(null);
 
   const [leftRevealed, setLeftRevealed] = useState(false);
   const [rightRevealed, setRightRevealed] = useState(false);
   const [emphasizeNow, setEmphasizeNow] = useState(false);
 
-  // Modal de derrota
   const [lostModalOpen, setLostModalOpen] = useState(false);
   const [lastScore, setLastScore] = useState(0);
 
@@ -57,32 +55,25 @@ export default function Game() {
     setLostModalOpen(false);
   }
 
-  // ⬇️ Nueva regla: SIEMPRE el de la derecha pasa a la izquierda para la próxima ronda.
+  // Siempre el de la derecha pasa a la izquierda
   function advanceWithRightAsNewLeft() {
     if (!rightCountry) return;
-
-    // El nuevo "base" es el antiguo contrincante (derecha)
     const newLeft = rightCountry;
-
-    // Elegimos un nuevo país para la derecha (distinto del nuevoLeft)
-    let newRight: Country;
+    let newRight;
     do {
       newRight = pool[Math.floor(Math.random() * pool.length)];
     } while (newRight.cca3 === newLeft.cca3);
 
     setLeftCountry(newLeft);
     setRightCountry(newRight);
-
-    // El de la izquierda queda revelado (continuidad), el nuevo entra oculto
     setLeftRevealed(true);
     setRightRevealed(false);
     setEmphasizeNow(false);
   }
 
-  function choose(side: "left" | "right") {
+  function choose(side) {
     if (!leftCountry || !rightCountry) return;
 
-    // Revela ambas poblaciones y énfasis visual
     setLeftRevealed(true);
     setRightRevealed(true);
     setEmphasizeNow(true);
@@ -92,15 +83,13 @@ export default function Game() {
     const chosenPop = side === "left" ? leftPop : rightPop;
     const otherPop  = side === "left" ? rightPop : leftPop;
 
-    const correct = chosenPop >= otherPop; // empate = correcto
+    const correct = chosenPop >= otherPop;
 
     setTimeout(() => {
       if (correct) {
-        setScore(s => s + 1);
-        // Nueva mecánica: pase lo que pase, el de la derecha va a la izquierda
+        setScore((s) => s + 1);
         advanceWithRightAsNewLeft();
       } else {
-        // Mostrar modal (no avanzamos de ronda)
         setLastScore(score);
         setLostModalOpen(true);
       }
@@ -139,7 +128,6 @@ export default function Game() {
         <div className="score">Puntaje: {score}</div>
       </footer>
 
-      {/* Modal de derrota */}
       {lostModalOpen && (
         <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="lose-title">
           <div className="modal">

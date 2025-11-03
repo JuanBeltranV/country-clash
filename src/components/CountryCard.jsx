@@ -1,4 +1,3 @@
-import type { Country } from "../api/restCountries";
 import { buildProjector, findFeature } from "../geo/countries";
 
 export function CountryCard({
@@ -7,15 +6,9 @@ export function CountryCard({
   emphasize = false,
   size = 360,
   onPick,
-}: {
-  country: Country;
-  showPopulation: boolean;
-  emphasize?: boolean;
-  size?: number;
-  onPick: () => void;
 }) {
   const feature = findFeature(country);
-  const proj = feature ? buildProjector(feature as any, size) : null;
+  const proj = feature ? buildProjector(feature, size) : null;
 
   return (
     <button className="card" onClick={onPick} aria-label={`Elegir ${country.name.common}`}>
@@ -35,7 +28,7 @@ export function CountryCard({
               </linearGradient>
             </defs>
             <path
-              d={proj.path(feature as any)!}
+              d={proj.path(feature)}
               fill="url(#grad)"
               stroke="#60a5fa"
               strokeWidth="1.2"
@@ -58,7 +51,7 @@ export function CountryCard({
       <div className="meta">
         {showPopulation ? (
           <span className={`pop revealed ${emphasize ? "emph" : ""}`}>
-            {country.population.toLocaleString()} hab.
+            {Number(country.population).toLocaleString()} hab.
           </span>
         ) : (
           <span className="hidden">¿Cuál tiene más población?</span>
