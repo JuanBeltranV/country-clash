@@ -1,4 +1,4 @@
-# 🌎 Country Clash — Population Battle
+#  Country Clash — Population Battle
 
 **Country Clash** es un juego web interactivo hecho con **React + Vite** donde los jugadores deben adivinar qué país tiene **mayor población**.  
 Cada vez que aciertas, sumas puntos y continúas hasta fallar. ¡Pon a prueba tu conocimiento del mundo!
@@ -23,17 +23,17 @@ Cada vez que aciertas, sumas puntos y continúas hasta fallar. ¡Pon a prueba tu
 
 ## 🚀 Características
 
-- 🗺️ Muestra la **silueta real** de cada país usando datos de `world-atlas`
-- 🏁 Cada tarjeta incluye la **bandera** y el **nombre del país**
-- ✨ Al pasar el mouse, las siluetas brillan con un suave efecto
-- 🔢 Acierta cuál país tiene **más población**
-- 💀 Si fallas, aparece un **modal animado** con tu puntaje y opción de **reiniciar**
-- ⚡ Datos obtenidos desde la **API pública [REST Countries](https://restcountries.com)**
-- 🧩 Interfaz moderna, **oscura**
+-  Muestra la **silueta real** de cada país usando datos de `world-atlas`
+-  Cada tarjeta incluye la **bandera** y el **nombre del país**
+-  Al pasar el mouse, las siluetas brillan con un suave efecto
+-  Acierta cuál país tiene **más población**
+-  Si fallas, aparece un **modal animado** con tu puntaje y opción de **reiniciar**
+-  Datos obtenidos desde la **API pública [REST Countries](https://restcountries.com)**
+-  Interfaz moderna, **oscura**
 
 ---
 
-## 🧰 Tecnologías utilizadas
+##  Tecnologías utilizadas
 
 - [React](https://react.dev/)
 - [Vite](https://vitejs.dev/)
