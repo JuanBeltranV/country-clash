@@ -1,189 +1,155 @@
-/* ============================
-  Tipografía y estilos base
-   ============================ */
+:root {
+  --bg: #0b1220;
+  --panel: #111827;
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #60a5fa;
+  --accent-strong: #3b82f6;
+  --accent-soft: #1e293b;
+}
 
-/* Fuente global: quiero algo grueso y simple → Arial Black.
-   Si no está, cae en Arial / sans-serif normal. */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 50% -20%, rgba(96, 165, 250, 0.12), transparent 36rem),
+    var(--bg);
   color: var(--text);
-  font-family: "Arial Black", Arial, Helvetica, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Variables de color que uso en todo el tema oscuro */
-:root {
-  --bg: #0b1220;          /* fondo de la página */
-  --panel: #111827;       /* fondo de las cards */
-  --panel-border: rgba(255,255,255,.06); /* bordes suaves */
-  --text: #e5e7eb;        /* texto principal (gris muy claro) */
-  --muted: #9ca3af;       /* texto secundario / descripciones */
-  --accent: #60a5fa;      /* azul de acento (botones, VS, etc) */
-  --accent-soft: #1e293b; /* azul más oscuro para fondos */
+button {
+  font: inherit;
 }
 
-/* Reset básico para que todo se comporte medianamente igual */
-* { box-sizing: border-box; }
-html, body, #root { height: 100%; }
-
-/* ============================
-  Layout general (wrapper)
-   ============================ */
-
-/* El wrapper divide todo en 3 filas:
-  - header (top)
-  - tablero (board)
-  - footer (score) */
 .wrapper {
-  min-height: 100vh;
+  min-height: 100svh;
   display: grid;
-  grid-template-rows: auto 1fr auto; /* header | board | footer */
+  grid-template-rows: auto 1fr auto;
 }
 
-/* Barra superior con el título del juego */
 .top {
   display: grid;
   place-items: center;
-  padding: 28px 16px 8px;
+  gap: 6px;
+  padding: 26px 16px 12px;
   border-bottom: 1px solid var(--panel-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-}
-
-/* Título principal */
-h1 {
-  margin: 0;
-  font-size: clamp(1.8rem, 2.6vw, 2.4rem);
-  letter-spacing: 0.3px;
-  font-weight: 800;
-}
-
-/* ============================
-  Tablero: cards + VS
-   ============================ */
-
-/* Contenedor central del juego:
-   dos cards a los lados y el VS en el medio */
-.board {
-  display: flex;
-  justify-content: center;        /* centro horizontal */
-  align-items: center;            /* centro vertical dentro de la fila */
-  gap: clamp(40px, 6vw, 80px);    /* espacio entre VS y las cards */
-  margin-top: clamp(20px, 5vh, 40px);
-  flex-wrap: wrap;                /* en pantallas chicas se acomodan */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
   text-align: center;
 }
 
-/* Circulito del VS en el medio */
-.vs {
-  position: relative;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 900;
-  color: var(--accent);
-  opacity: 0.85;
-  text-shadow: 0 0 16px rgba(96,165,250,0.25);
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 850;
+  line-height: 1;
+}
+
+.top p {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-weight: 650;
+}
+
+.board {
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: clamp(60px, 10vw, 100px);
-  height: clamp(60px, 10vw, 100px);
-  border-radius: 50%;
+  align-items: center;
+  gap: clamp(34px, 5vw, 72px);
+  padding: clamp(20px, 5vh, 42px) 18px;
+  text-align: center;
+}
+
+.vs {
+  flex: 0 0 auto;
+  width: clamp(60px, 8vw, 96px);
+  height: clamp(60px, 8vw, 96px);
+  display: grid;
+  place-items: center;
   border: 2px solid var(--accent);
-  background: radial-gradient(circle at center, rgba(96,165,250,0.15), transparent 70%);
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(96, 165, 250, 0.16), transparent 70%);
+  color: var(--accent);
+  font-size: clamp(1.9rem, 4vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 0 16px rgba(96, 165, 250, 0.28);
 }
 
-/* Animación opcional de “latido” para el VS (por ahora sin usar) */
-@keyframes vsPulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(96,165,250,0); }
-  50%      { transform: scale(1.06); box-shadow: 0 0 32px rgba(96,165,250,0.15); }
-}
-
-/* ============================
-  Footer y puntaje
-   ============================ */
-
-/* Pie donde muestro el puntaje actual */
 .footer {
   display: grid;
   place-items: center;
-  padding: 18px 16px 30px;
+  padding: 16px 16px 28px;
   border-top: 1px solid var(--panel-border);
-  background: linear-gradient(0deg, rgba(255,255,255,0.02), transparent);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), transparent);
 }
 
-/* Caja del puntaje (score actual) */
 .score {
-  font-weight: 900;
-  font-size: clamp(1.4rem, 3vw, 1.8rem);
-  padding: 10px 16px;
+  padding: 10px 18px;
   border: 1px solid var(--panel-border);
-  border-radius: 14px;
-  background: radial-gradient(
-    1200px 300px at 50% 100%,
-    rgba(96,165,250,0.08),
-    transparent 60%
-  );
+  border-radius: 12px;
+  background: rgba(17, 24, 39, 0.82);
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.32);
+  font-size: clamp(1.1rem, 2.6vw, 1.55rem);
+  font-weight: 850;
 }
 
-/* ============================
-  Card de país
-   ============================ */
-
-/* Contenedor de cada país (clickable) */
 .card {
-  width: min(520px, 90vw);
+  width: min(520px, 38vw);
   border: 1px solid var(--panel-border);
-  background: var(--panel);
+  background: rgba(17, 24, 39, 0.94);
   border-radius: 18px;
   padding: 18px;
+  color: inherit;
   cursor: pointer;
   transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    border-color .18s ease;
-  box-shadow: 0 12px 38px rgba(0,0,0,.28);
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.28);
 }
 
-/* Efecto hover sutil: levanta la card y resalta el borde */
 .card:hover {
   transform: translateY(-3px);
-  border-color: rgba(96,165,250,.28);
-  box-shadow: 0 18px 52px rgba(2,6,23,.5);
+  border-color: rgba(96, 165, 250, 0.32);
+  box-shadow: 0 18px 52px rgba(2, 6, 23, 0.5);
 }
 
-/* ============================
-  Silueta del país (SVG)
-   ============================ */
-
-/* Contenedor que centra el SVG */
 .outline {
   display: grid;
   place-items: center;
   margin-bottom: 12px;
 }
 
-/* Ajustes del SVG que dibuja el país */
 .outline svg {
   width: 100%;
-  max-width: 360px;
+  max-width: 300px;
   height: auto;
 }
 
-/* Color base del mapa y borde */
 .outline svg path {
   fill: #0f172a;
   stroke: #435165;
   stroke-width: 1.1;
-  /* Solo cambio color/brillo, no el tamaño */
   transition: stroke 0.25s ease, filter 0.25s ease;
 }
 
-/* Cuando paso el mouse sobre la card, hago brillar el contorno del país */
 .card:hover .outline svg path {
   stroke: #93c5fd;
-  filter: drop-shadow(0 0 6px rgba(147,197,253,0.45));
+  filter: drop-shadow(0 0 6px rgba(147, 197, 253, 0.45));
 }
 
-/* Si no tengo silueta para el país, muestro este bloque de fallback */
 .outline-fallback {
   width: 360px;
   height: 360px;
@@ -193,142 +159,143 @@ h1 {
   border-radius: 12px;
 }
 
-/* ============================
-  Bandera e info textual
-   ============================ */
-
-/* Imagen de la bandera del país */
 .flag {
   width: 100%;
-  height: clamp(180px, 26vw, 240px);
+  height: clamp(140px, 14vw, 180px);
   object-fit: cover;
+  border: 1px solid var(--panel-border);
   border-radius: 14px;
   margin: 14px 0;
-  border: 1px solid var(--panel-border);
 }
 
-/* Nombre del país */
 .name {
   margin: 6px 0 10px;
-  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-  font-weight: 800;
-  color: #ffffff;                 /* blanco para que destaque sobre el card oscuro */
-  text-shadow: 0 0 8px rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-weight: 850;
+  line-height: 1.1;
 }
 
-/* Texto para detalles secundarios (debajo del nombre) */
 .meta {
   color: var(--muted);
+  font-size: 0.98rem;
+  font-weight: 650;
 }
 
-/* Span donde muestro la población cuando se revela */
 .pop {
   display: inline-block;
-  font-weight: 900;
-  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
   color: var(--text);
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-weight: 900;
 }
 
-/* Texto placeholder cuando todavía no revelo la población */
 .hidden {
-  opacity: .65;
+  opacity: 0.74;
 }
 
-/* Animación cuando se revela la población: pequeño “pop” de escala */
 .pop.revealed.emph {
-  animation: popScale 950ms cubic-bezier(.2, .9, .1, 1.02);
+  animation: popScale 950ms cubic-bezier(0.2, 0.9, 0.1, 1.02);
 }
 
 @keyframes popScale {
-  0%   { transform: scale(1); }
-  35%  { transform: scale(1.4); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  35% {
+    transform: scale(1.34);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
-/* ============================
-  Estados especiales y helpers
-   ============================ */
-
-/* Mensaje de carga mientras espero la API */
-.loading {
-  text-align: center;
-  margin-top: 48px;
+.loading-screen {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 16px;
   color: var(--muted);
+  font-weight: 750;
 }
 
-/* Texto de ayuda (si lo llego a usar) */
-.hint {
-  text-align: center;
-  opacity: .72;
-  margin-top: 16px;
-  color: var(--muted);
+.loading-screen p {
+  margin: 0;
 }
 
-/* Estilo por si algún día marco una card como “correcta” explícitamente */
-.card.correct .name {
-  color: #93c5fd;
-  text-shadow: 0 0 12px rgba(147,197,253,0.4);
-  transition: color 0.4s ease;
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
-/* ============================
-  Modal de derrota
-   ============================ */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-/* Fondo oscuro semitransparente detrás del modal */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(2, 6, 23, 0.65);
-  backdrop-filter: blur(2px);
   display: grid;
   place-items: center;
+  padding: 18px;
+  background: rgba(2, 6, 23, 0.65);
+  backdrop-filter: blur(2px);
   z-index: 50;
-  animation: fadeIn .2s ease;
+  animation: fadeIn 0.2s ease;
 }
 
-/* Aparece con un pequeño fade-in */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-/* Caja del modal (mensaje de "Perdiste") */
 .modal {
   width: min(520px, 92vw);
-  background: var(--panel);
+  padding: 24px;
   border: 1px solid var(--panel-border);
   border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 18px 60px rgba(0,0,0,.45);
+  background: var(--panel);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
   text-align: center;
-  animation: popIn .18s ease-out;
+  animation: popIn 0.18s ease-out;
 }
 
-/* Animación de entrada del modal */
 @keyframes popIn {
-  0%   { transform: scale(.96); opacity: 0; }
-  100% { transform: scale(1);   opacity: 1; }
+  0% {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-/* Título del modal */
 .modal h2 {
   margin: 0 0 8px;
   font-size: clamp(1.6rem, 2.8vw, 2rem);
 }
 
-/* Texto secundario del modal (detalle del puntaje) */
 .modal-sub {
-  color: var(--muted);
   margin: 0 0 16px;
+  color: var(--muted);
   font-size: clamp(1rem, 2vw, 1.1rem);
 }
 
-/* ============================
-  Botones
-   ============================ */
-
-/* Estilo base para todos los botones */
 .btn {
   appearance: none;
   border: 0;
@@ -337,25 +304,125 @@ h1 {
   font-weight: 800;
   cursor: pointer;
   transition:
-    transform .12s ease,
-    box-shadow .12s ease,
-    background .12s ease,
-    color .12s ease;
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease,
+    color 0.12s ease;
 }
 
-/* Botón principal (especialmente el de "Reiniciar partida") */
 .btn-primary {
-  background: linear-gradient(180deg, #60a5fa, #3b82f6);
+  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
   color: white;
-  box-shadow: 0 8px 24px rgba(59,130,246,.35);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
 }
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 32px rgba(59,130,246,.45);
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.45);
 }
 
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 4px 18px rgba(59,130,246,.35);
+  box-shadow: 0 4px 18px rgba(59, 130, 246, 0.35);
+}
+
+@media (max-width: 820px) {
+  .wrapper {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .top {
+    gap: 4px;
+    padding: 14px 12px 8px;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 8vw, 2.1rem);
+  }
+
+  .top p {
+    font-size: clamp(0.82rem, 3.4vw, 0.95rem);
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: clamp(8px, 2.6vw, 14px);
+    align-items: center;
+    padding: 10px 8px;
+  }
+
+  .card {
+    width: 100%;
+    min-width: 0;
+    padding: clamp(8px, 2.4vw, 12px);
+    border-radius: 14px;
+  }
+
+  .outline {
+    margin-bottom: 6px;
+  }
+
+  .outline svg {
+    max-width: min(35vw, 160px);
+  }
+
+  .flag {
+    height: clamp(74px, 22vw, 118px);
+    margin: 8px 0;
+    border-radius: 10px;
+  }
+
+  .name {
+    margin: 4px 0 6px;
+    font-size: clamp(0.86rem, 3.6vw, 1.05rem);
+  }
+
+  .meta {
+    min-height: 32px;
+    font-size: clamp(0.66rem, 2.7vw, 0.82rem);
+  }
+
+  .pop {
+    font-size: clamp(0.76rem, 3vw, 0.96rem);
+  }
+
+  .vs {
+    width: clamp(38px, 10vw, 48px);
+    height: clamp(38px, 10vw, 48px);
+    font-size: clamp(1rem, 4.5vw, 1.3rem);
+    border-width: 1px;
+  }
+
+  .footer {
+    padding: 8px 10px 12px;
+  }
+
+  .score {
+    width: min(100%, 300px);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: clamp(0.92rem, 4vw, 1.08rem);
+    text-align: center;
+  }
+}
+
+@media (max-width: 390px) {
+  .board {
+    gap: 6px;
+    padding-inline: 6px;
+  }
+
+  .flag {
+    height: clamp(64px, 21vw, 88px);
+  }
+
+  .outline svg {
+    max-width: 31vw;
+  }
+
+  .hidden {
+    display: block;
+    line-height: 1.15;
+  }
 }

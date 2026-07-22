@@ -1,65 +1,50 @@
-#  Country Clash — Population Battle
+# Country Clash
 
-**Country Clash** es un juego web interactivo hecho con **React + Vite** donde los jugadores deben adivinar qué país tiene **mayor población**.  
-Cada vez que aciertas, sumas puntos y continúas hasta fallar. ¡Pon a prueba tu conocimiento del mundo!
+**Country Clash** is a web game built with **React + Vite** where you choose which country has the larger population.
 
----
+Each correct answer adds one point and keeps the winning country for the next round. The run continues until you miss.
 
-## 🕹️ Demo
+## Demo
 
-🔗 **[Jugar en GitHub Pages](https://juanbeltranv.github.io/country-clash/)**  
+[Play on GitHub Pages](https://juanbeltranv.github.io/country-clash/)
 
----
-
-## 📸 Vista previa
+## Preview
 
 <p align="center">
   <a href="https://juanbeltranv.github.io/country-clash/" target="_blank">
-    <img src="public/assets/preview-example.png" alt="Country Clash Preview" width="600">
+    <img src="public/assets/preview-example.png" alt="Country Clash preview" width="700">
   </a>
 </p>
 
----
+## Features
 
-## 🚀 Características
+- Real country silhouettes using `world-atlas`, `topojson-client`, and `d3-geo`.
+- Country flag, name, and population comparison.
+- Current score and best score for the session.
+- Loss modal with a quick restart action.
+- Bundled fallback country data so GitHub Pages keeps working if the public API changes.
+- Responsive dark interface for desktop and mobile screens.
 
--  Muestra la **silueta real** de cada país usando datos de `world-atlas`
--  Cada tarjeta incluye la **bandera** y el **nombre del país**
--  Al pasar el mouse, las siluetas brillan con un suave efecto
--  Acierta cuál país tiene **más población**
--  Si fallas, aparece un **modal animado** con tu puntaje y opción de **reiniciar**
--  Datos obtenidos desde la **API pública [REST Countries](https://restcountries.com)**
--  Interfaz moderna, **oscura**
-
----
-
-##  Tecnologías utilizadas
+## Tech Stack
 
 - [React](https://react.dev/)
 - [Vite](https://vitejs.dev/)
-- [REST Countries API](https://restcountries.com/)
-- [D3-Geo](https://github.com/d3/d3-geo)
-- [TopoJSON](https://github.com/topojson/topojson-client)
+- [D3 Geo](https://github.com/d3/d3-geo)
+- [TopoJSON Client](https://github.com/topojson/topojson-client)
 - [world-atlas](https://github.com/topojson/world-atlas)
-- [GitHub Pages](https://pages.github.com/) — para el despliegue
+- [GitHub Pages](https://pages.github.com/)
 
----
+## Local Development
 
-## ⚙️ Instalación local
+```bash
+git clone https://github.com/JuanBeltranV/country-clash.git
+cd country-clash
+npm install
+npm run dev
+```
 
-1. **Clona el repositorio:**
-   ```bash
-   git clone https://github.com/JuanBeltranV/country-clash.git
-   cd country-clash
-   
-2. **Instala las dependencias:**
-   ```bash
-    npm install
+Then open:
 
-3. **Ejecuta en modo desarrollo:**
-   ```bash
-    npm run dev
-
-4. **Abre en tu navegador:**
-    ```bash
-   http://localhost:5173
+```text
+http://localhost:5173
+```
