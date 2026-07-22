@@ -1,26 +1,65 @@
 import { findFeature } from "../geo/countries";
+import { fallbackCountries } from "../data/fallbackCountries";
 
-// Campos que me interesan de la API de RestCountries
-const FIELDS = "name,population,flags,cca3,ccn3";
+const FIELDS = "name,population,flags,cca2,cca3,ccn3";
 const URL = `https://restcountries.com/v3.1/all?fields=${FIELDS}`;
+const REQUEST_TIMEOUT_MS = 3500;
+
+function getFlagUrl(country) {
+  return `https://flagcdn.com/${country.cca2.toLowerCase()}.svg`;
+}
+
+function normalizeCountries(countries) {
+  return countries
+    .map((country) => ({
+      ...country,
+      flags: {
+        svg: country.flags?.svg || getFlagUrl(country),
+        png: country.flags?.png || getFlagUrl(country),
+        alt: country.flags?.alt || `Bandera de ${country.name.common}`,
+      },
+    }))
+    .filter(
+      (country) =>
+        typeof country.population === "number" &&
+        country.population > 0 &&
+        country.cca2 &&
+        country.cca3 &&
+        findFeature(country)
+    );
+}
+
+async function fetchRemoteCountries() {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const res = await fetch(URL, { signal: controller.signal });
+    const data = await res.json();
+
+    if (!res.ok || !Array.isArray(data)) {
+      throw new Error("REST Countries returned an unsupported response");
+    }
+
+    return data;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
 
 export async function fetchCountries() {
-  // Llamo a la API
-  const res = await fetch(URL);
-  if (!res.ok) throw new Error("REST Countries request failed");
+  try {
+    const remoteCountries = normalizeCountries(await fetchRemoteCountries());
+    if (remoteCountries.length >= 2) {
+      return remoteCountries.sort((a, b) =>
+        a.name.common.localeCompare(b.name.common)
+      );
+    }
+  } catch {
+    // Fall back when the legacy public API is unavailable or deprecated.
+  }
 
-  const data = await res.json();
-
-  // Filtro: solo países válidos con población y silueta disponible
-  // (para evitar países sin mapa o datos incompletos)
-  const filtered = data.filter(
-    (c) =>
-      typeof c.population === "number" &&
-      c.population > 0 &&
-      c.cca3 &&
-      findFeature(c) // solo los que tengan forma en world-atlas
+  return normalizeCountries(fallbackCountries).sort((a, b) =>
+    a.name.common.localeCompare(b.name.common)
   );
-
-  // Devuelvo la lista ordenada alfabéticamente
-  return filtered.sort((a, b) => a.name.common.localeCompare(b.name.common));
 }
