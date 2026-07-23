@@ -1,31 +1,31 @@
 # Country Clash
 
-**Country Clash** is a web game built with **React + Vite** where you choose which country has the larger population.
+**Country Clash** es un juego web hecho con **React + Vite** donde debes elegir que pais tiene mayor poblacion.
 
-Each correct answer adds one point and keeps the winning country for the next round. The run continues until you miss.
+Cada acierto suma un punto y mantiene al pais ganador para la siguiente ronda. La partida continua hasta que fallas.
 
 ## Demo
 
-[Play on GitHub Pages](https://juanbeltranv.github.io/country-clash/)
+[Jugar en GitHub Pages](https://juanbeltranv.github.io/country-clash/)
 
-## Preview
+## Vista Previa
 
 <p align="center">
   <a href="https://juanbeltranv.github.io/country-clash/" target="_blank">
-    <img src="public/assets/preview-example.png" alt="Country Clash preview" width="700">
+    <img src="public/assets/preview-example.png" alt="Vista previa de Country Clash" width="700">
   </a>
 </p>
 
-## Features
+## Caracteristicas
 
-- Real country silhouettes using `world-atlas`, `topojson-client`, and `d3-geo`.
-- Country flag, name, and population comparison.
-- Current score and best score for the session.
-- Loss modal with a quick restart action.
-- Bundled fallback country data so GitHub Pages keeps working if the public API changes.
-- Responsive dark interface for desktop and mobile screens.
+- Siluetas reales de paises usando `world-atlas`, `topojson-client` y `d3-geo`.
+- Comparacion entre bandera, nombre y poblacion de dos paises.
+- Puntaje actual y mejor puntaje de la sesion.
+- Modal de derrota con opcion para reiniciar rapidamente.
+- Datos locales de respaldo para que GitHub Pages siga funcionando aunque cambie la API publica.
+- Interfaz oscura y responsive para escritorio y telefono.
 
-## Tech Stack
+## Tecnologias
 
 - [React](https://react.dev/)
 - [Vite](https://vitejs.dev/)
@@ -34,7 +34,7 @@ Each correct answer adds one point and keeps the winning country for the next ro
 - [world-atlas](https://github.com/topojson/world-atlas)
 - [GitHub Pages](https://pages.github.com/)
 
-## Local Development
+## Instalacion Local
 
 ```bash
 git clone https://github.com/JuanBeltranV/country-clash.git
@@ -43,7 +43,7 @@ npm install
 npm run dev
 ```
 
-Then open:
+Luego abre:
 
 ```text
 http://localhost:5173
