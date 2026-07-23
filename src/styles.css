@@ -151,18 +151,24 @@ h1 {
 }
 
 .outline-fallback {
-  width: 360px;
-  height: 360px;
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1;
   display: grid;
   place-items: center;
+  padding: 18px;
   background: var(--accent-soft);
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 750;
   border-radius: 12px;
 }
 
 .flag {
   width: 100%;
   height: clamp(140px, 14vw, 180px);
-  object-fit: cover;
+  object-fit: contain;
+  background: transparent;
   border: 1px solid var(--panel-border);
   border-radius: 14px;
   margin: 14px 0;
@@ -367,6 +373,12 @@ h1 {
     max-width: min(35vw, 160px);
   }
 
+  .outline-fallback {
+    max-width: min(35vw, 160px);
+    padding: 10px;
+    font-size: clamp(0.64rem, 2.5vw, 0.78rem);
+  }
+
   .flag {
     height: clamp(74px, 22vw, 118px);
     margin: 8px 0;
@@ -418,6 +430,10 @@ h1 {
   }
 
   .outline svg {
+    max-width: 31vw;
+  }
+
+  .outline-fallback {
     max-width: 31vw;
   }
 

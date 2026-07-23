@@ -6,6 +6,17 @@ function pickTwoFirst(arr) {
   return [arr[0], arr[1]];
 }
 
+function shuffleCountries(countries) {
+  const shuffled = [...countries];
+
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled;
+}
+
 const REVEAL_DELAY_MS = 1200;
 
 export default function Game() {
@@ -30,7 +41,7 @@ export default function Game() {
     (async () => {
       try {
         const data = await fetchCountries();
-        const shuffled = [...data].sort(() => Math.random() - 0.5);
+        const shuffled = shuffleCountries(data);
 
         if (shuffled.length < 2) {
           console.error("No hay suficientes países para jugar");
@@ -59,7 +70,7 @@ export default function Game() {
   function resetRunWithSamePool() {
     if (pool.length < 2) return;
 
-    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    const shuffled = shuffleCountries(pool);
     const [a, b] = pickTwoFirst(shuffled);
 
     setPool(shuffled);

@@ -1,5 +1,5 @@
-import { findFeature } from "../geo/countries";
 import { fallbackCountries } from "../data/fallbackCountries";
+import { findFeature } from "../geo/countries";
 
 const FIELDS = "name,population,flags,cca2,cca3,ccn3";
 const URL = `https://restcountries.com/v3.1/all?fields=${FIELDS}`;
